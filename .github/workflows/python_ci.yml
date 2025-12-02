@@ -1,35 +1,36 @@
 name: Python CI Pipeline
+
 on:
   push:
-    branches:["main"]
+    branches: ["main"]
   pull_request:
-    branches:["main"]
+    branches: ["main"]
 
 jobs:
   build-and-test:
     name: Build, Install, and Test
     runs-on: ubuntu-latest
-   
+
     steps:
-    - name: checkout Repository code
+    - name: Checkout Repository Code
       uses: actions/checkout@v4
 
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version:'3.11'
-        cache:'pip'
+        python-version: "3.11"
+        cache: "pip"
 
-    -name: Install Dependecies
-     run: pip install -r requirements.txt
+    - name: Install Dependencies
+      run: pip install -r requirements.txt
 
-    -name: Install Pytest and Flake8 (If not in requirements.txt)
-     run: pip install pytest flake8
+    - name: Install Pytest and Flake8 (If not in requirements.txt)
+      run: pip install pytest flake8
 
-    -name: Lint with Flake8
+    - name: Lint with Flake8
+      run: |
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
 
-     run:|
-       flake8 . --count --select=E9,F63,F7,F82 --show-source -statistics
+    - name: Run Pytest
+      run: pytest
 
-    -name: Run Pytest
-     run: pytest
